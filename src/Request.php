@@ -171,15 +171,35 @@ class Request
     {
         $debug_handle = TelegramLog::getDebugLogTempStream();
 
-        try {
-            //Fix so that the keyboard markup is a string, not an object
-            if (isset($data['reply_markup']) && !is_string($data['reply_markup'])) {
-                $data['reply_markup'] = (string)$data['reply_markup'];
-            }
+        //Fix so that the keyboard markup is a string, not an object
+        if (isset($data['reply_markup']) && !is_string($data['reply_markup'])) {
+            $data['reply_markup'] = (string)$data['reply_markup'];
+        }
 
+        $request_params = ['debug' => $debug_handle];
+
+        //Check for resources in data
+        $contains_resource = false;
+        foreach ($data as $item) {
+            if (is_resource($item)) {
+                $contains_resource = true;
+                break;
+            }
+        }
+
+        //Reformat data array in multipart way
+        if ($contains_resource) {
+            foreach ($data as $key => $item) {
+                $request_params['multipart'][] = array('name' => $key, 'contents' => $item);
+            }
+        } else {
+            $request_params['form_params'] = $data;
+        }
+
+        try {
             $response = self::$client->post(
                 '/bot' . self::$telegram->getApiKey() . '/' . $action,
-                ['debug' => $debug_handle, 'form_params' => $data]
+                $request_params
             );
         } catch (RequestException $e) {
             throw new TelegramException($e->getMessage());
@@ -239,11 +259,15 @@ class Request
      *
      * @param string $file
      *
-     * @return CURLFile
+     * @return resource
      */
     protected static function encodeFile($file)
     {
-        return new \CURLFile($file);
+        $fp = fopen($file, 'r');
+        if ($fp === false) {
+            throw new TelegramException('Cannot open ' . $file . ' for reading');
+        }
+        return $fp;
     }
 
     /**
@@ -308,7 +332,7 @@ class Request
         $string_len_utf8 = mb_strlen($text, 'UTF-8');
         if ($string_len_utf8 > 4096) {
             $data['text'] = mb_substr($text, 0, 4096);
-            $result = self::send('sendMessage', $data);
+            self::send('sendMessage', $data);
             $data['text'] = mb_substr($text, 4096, $string_len_utf8);
             return self::sendMessage($data);
         }

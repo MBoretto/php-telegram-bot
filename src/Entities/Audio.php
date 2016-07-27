@@ -21,6 +21,11 @@ class Audio extends Entity
     protected $mime_type;
     protected $file_size;
 
+    /**
+     * Audio constructor.
+     *
+     * @param array $data
+     */
     public function __construct(array $data)
     {
         $this->file_id = isset($data['file_id']) ? $data['file_id'] : null;
@@ -29,7 +34,7 @@ class Audio extends Entity
         }
 
         $this->duration = isset($data['duration']) ? $data['duration'] : null;
-        if (empty($this->duration)) {
+        if ($this->duration === '' || $this->duration === null) {
             throw new TelegramException('duration is empty!');
         }
 

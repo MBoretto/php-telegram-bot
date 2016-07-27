@@ -25,7 +25,7 @@ class InlinequeryCommand extends SystemCommand
      */
     protected $name = 'inlinequery';
     protected $description = 'Reply to inline query';
-    protected $version = '1.0.1';
+    protected $version = '1.0.2';
     /**#@-*/
 
     /**
@@ -38,18 +38,21 @@ class InlinequeryCommand extends SystemCommand
         $query = $inline_query->getQuery();
 
         $data = ['inline_query_id' => $inline_query->getId()];
+        $results = [];
 
-        $articles = [
-            ['id' => '001', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'message_text' => 'you enter: ' . $query , 'input_message_content' => new InputTextMessageContent([ 'message_text' => ' ' . $query ])],
-            ['id' => '002', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'message_text' => 'you enter: ' . $query , 'input_message_content' => new InputTextMessageContent([ 'message_text' => ' ' . $query ])],
-            ['id' => '003', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'message_text' => 'you enter: ' . $query , 'input_message_content' => new InputTextMessageContent([ 'message_text' => ' ' . $query ])],
-        ];
+        if ($query !== '') {
+            $articles = [
+                ['id' => '001', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'description' => 'you enter: ' . $query, 'input_message_content' => new InputTextMessageContent(['message_text' => ' ' . $query])],
+                ['id' => '002', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'description' => 'you enter: ' . $query, 'input_message_content' => new InputTextMessageContent(['message_text' => ' ' . $query])],
+                ['id' => '003', 'title' => 'https://core.telegram.org/bots/api#answerinlinequery', 'description' => 'you enter: ' . $query, 'input_message_content' => new InputTextMessageContent(['message_text' => ' ' . $query])],
+            ];
 
-        $array_article = [];
-        foreach ($articles as $article) {
-            $array_article[] = new InlineQueryResultArticle($article);
+            foreach ($articles as $article) {
+                $results[] = new InlineQueryResultArticle($article);
+            }
         }
-        $data['results'] = '[' . implode(',', $array_article) . ']';
+
+        $data['results'] = '[' . implode(',', $results) . ']';
 
         return Request::answerInlineQuery($data);
     }
