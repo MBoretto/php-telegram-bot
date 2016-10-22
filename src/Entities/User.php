@@ -62,14 +62,48 @@ class User extends Entity
         return $this->username;
     }
 
-    public function tryMention()
+    //public function tryMention()
+    //{
+    //    if (is_null($this->username)) {
+    //        if (!is_null($this->last_name)) {
+    //            return $this->first_name.' '.$this->last_name;
+    //        }
+    //        return $this->first_name;
+    //    }
+    //    return '@'.$this->username;
+    //}
+
+
+    public function tryMention($markdown = false)
     {
-        if (is_null($this->username)) {
-            if (!is_null($this->last_name)) {
-                return $this->first_name.' '.$this->last_name;
+        if (!is_null($this->username)) {
+            if ($markdown) {
+                return '@' . $this->stripMarkDown($this->username);
             }
-            return $this->first_name;
+            return '@' . $this->username;
         }
-        return '@'.$this->username;
+        $name = $this->first_name;
+        if (!is_null($this->last_name)) {
+            $name .= ' ' . $this->last_name;
+        }
+        if ($markdown) {
+            return $this->stripMarkDown($name);
+        }
+        return $name;
+ 
+    } 
+
+    public function stripMarkdown($string)
+    {
+        $string = str_replace('[', '\[', $string);
+        $string = str_replace('`', '\`', $string);
+        $string = str_replace('*', '\*', $string);
+        return str_replace('_', '\_', $string);
     }
+
+
+
+
+
+
 }
