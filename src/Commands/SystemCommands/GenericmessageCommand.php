@@ -46,6 +46,9 @@ class GenericmessageCommand extends SystemCommand
      */
     public function execute()
     {
+        if (is_null($this->getMessage())) {
+            return Request::emptyResponse();
+        }
         //If a conversation is busy, execute the conversation command after handling the message
         $conversation = new Conversation(
             $this->getMessage()->getFrom()->getId(),
