@@ -12,7 +12,7 @@
 
 namespace Longman\TelegramBot\Entities;
 
-class ReplyKeyboardHide extends Entity
+class ReplyKeyboardRemove extends Entity
 {
     protected $hide_keyboard;
     protected $selective;
@@ -24,7 +24,7 @@ class ReplyKeyboardHide extends Entity
      */
     public function __construct(array $data = null)
     {
-        $this->hide_keyboard = true;
+        $this->remove_keyboard = true;
         $this->selective = isset($data['selective']) ? $data['selective'] : false;
     }
 }

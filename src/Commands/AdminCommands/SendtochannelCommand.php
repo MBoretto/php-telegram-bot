@@ -14,7 +14,7 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Commands\AdminCommand;
 use Longman\TelegramBot\Entities\Message;
-use Longman\TelegramBot\Entities\ReplyKeyboardHide;
+use Longman\TelegramBot\Entities\ReplyKeyboardRemove;
 use Longman\TelegramBot\Entities\ReplyKeyboardMarkup;
 use Longman\TelegramBot\Exception\TelegramException;
 
@@ -72,7 +72,7 @@ class SendtochannelCommand extends AdminCommand
                     $this->conversation->update();
 
                     $data['text'] = 'Insert the channel name: (@yourchannel)';
-                    $data['reply_markup'] = new ReplyKeyBoardHide(['selective' => true]);
+                    $data['reply_markup'] = new ReplyKeyBoardRemove(['selective' => true]);
                     $result = Request::sendMessage($data);
 
                     break;
@@ -120,7 +120,7 @@ class SendtochannelCommand extends AdminCommand
                     $this->conversation->notes['state'] = 1;
                     $this->conversation->update();
 
-                    $data['reply_markup'] = new ReplyKeyBoardHide(['selective' => true]);
+                    $data['reply_markup'] = new ReplyKeyBoardRemove(['selective' => true]);
                     $data['text'] = 'Insert the content you want to share: text, photo, audio...';
                     $result = Request::sendMessage($data);
                     break;
@@ -167,7 +167,7 @@ class SendtochannelCommand extends AdminCommand
                     $this->conversation->update();
 
                     $data['text'] = 'Insert caption:';
-                    $data['reply_markup'] = new ReplyKeyBoardHide(['selective' => true]);
+                    $data['reply_markup'] = new ReplyKeyBoardRemove(['selective' => true]);
                     $result = Request::sendMessage($data);
                     break;
                 }
@@ -214,7 +214,7 @@ class SendtochannelCommand extends AdminCommand
                 $this->conversation->notes['last_message_id'] = $message->getMessageId();
                 // no break
             case 5:
-                $data['reply_markup'] = new ReplyKeyBoardHide(['selective' => true]);
+                $data['reply_markup'] = new ReplyKeyBoardRemove(['selective' => true]);
 
                 if ($this->conversation->notes['post_message']) {
                     $data['text'] = $this->publish(
