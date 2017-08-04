@@ -16,6 +16,7 @@ class Update extends Entity
 {
 
     protected $update_id;
+    protected $channel_post;
     protected $message;
     protected $edited_message;
     protected $inline_query;
@@ -37,6 +38,12 @@ class Update extends Entity
 
         $update_id = isset($data['update_id']) ? $data['update_id'] : null;
         $this->update_id = $update_id;
+
+        $this->channel_post = isset($data['channel_post']) ? $data['channel_post'] : null;
+        if (!empty($this->channel_post)) {
+            $this->update_type = 'channel_post';
+        }
+
 
         $this->message = isset($data['message']) ? $data['message'] : null;
         if (!empty($this->message)) {

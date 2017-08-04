@@ -336,7 +336,6 @@ class Telegram
         if (empty($post)) {
             throw new TelegramException('Invalid JSON!');
         }
-
         return $this->processUpdate(new Update($post, $this->bot_name))->isOk();
     }
 
@@ -367,6 +366,12 @@ class Telegram
         $command = 'genericmessage';
 
         $update_type = $this->update->getUpdateType();
+
+        if ($update_type === 'channel_post') {
+            return Request::emptyResponse();
+        }
+
+
         if (in_array($update_type, ['inline_query', 'chosen_inline_result', 'callback_query', 'edited_message'])) {
             $command = $this->getCommandFromType($update_type);
         } elseif ($update_type === 'message') {
