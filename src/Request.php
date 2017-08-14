@@ -585,12 +585,15 @@ class Request
      *
      * @return mixed
      */
-    public static function setWebhook($url = '', $file = null)
+    public static function setWebhook($url = '', $file = null, $max_connections = null)
     {
         $data = ['url' => $url];
 
         if (!is_null($file)) {
             $data['certificate'] = self::encodeFile($file);
+        }
+        if ($max_connections !== null) {
+            $data['max_connections'] = $max_connections;
         }
 
         return self::send('setWebhook', $data);

@@ -703,13 +703,13 @@ class Telegram
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      */
-    public function setWebHook($url, $path_certificate = null)
+    public function setWebHook($url, $path_certificate = null, $max_connections = null)
     {
         if (empty($url)) {
             throw new TelegramException('Hook url is empty!');
         }
 
-        $result = Request::setWebhook($url, $path_certificate);
+        $result = Request::setWebhook($url, $path_certificate, $max_connections);
 
         if (!$result->isOk()) {
             throw new TelegramException(
