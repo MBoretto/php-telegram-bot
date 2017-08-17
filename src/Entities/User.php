@@ -62,18 +62,6 @@ class User extends Entity
         return $this->username;
     }
 
-    //public function tryMention()
-    //{
-    //    if (is_null($this->username)) {
-    //        if (!is_null($this->last_name)) {
-    //            return $this->first_name.' '.$this->last_name;
-    //        }
-    //        return $this->first_name;
-    //    }
-    //    return '@'.$this->username;
-    //}
-
-
     public function tryMention($markdown = false)
     {
         if (!is_null($this->username)) {
@@ -90,8 +78,7 @@ class User extends Entity
             return $this->stripMarkDown($name);
         }
         return $name;
- 
-    } 
+    }
 
     public function stripMarkdown($string)
     {
@@ -100,10 +87,4 @@ class User extends Entity
         $string = str_replace('*', '\*', $string);
         return str_replace('_', '\_', $string);
     }
-
-
-
-
-
-
 }
