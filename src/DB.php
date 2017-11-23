@@ -437,41 +437,19 @@ class DB
         $update_id = $update->getUpdateId();
         if ($update->getUpdateType() == 'message') {
             $message = $update->getMessage();
-
-            if (self::insertMessageRequest($message)) {
-                $message_id = $message->getMessageId();
-                $chat_id = $message->getChat()->getId();
-                return self::insertTelegramUpdate($update_id, $chat_id, $message_id, null, null, null, null);
-            }
+            return self::insertMessageRequest($message);
         } elseif ($update->getUpdateType() == 'inline_query') {
             $inline_query = $update->getInlineQuery();
-
-            if (self::insertInlineQueryRequest($inline_query)) {
-                $inline_query_id = $inline_query->getId();
-                return self::insertTelegramUpdate($update_id, null, null, $inline_query_id, null, null, null);
-            }
+            return self::insertInlineQueryRequest($inline_query);
         } elseif ($update->getUpdateType() == 'chosen_inline_result') {
             $chosen_inline_result = $update->getChosenInlineResult();
-
-            if (self::insertChosenInlineResultRequest($chosen_inline_result)) {
-                $chosen_inline_result_local_id = self::$pdo->lastInsertId();
-                return self::insertTelegramUpdate($update_id, null, null, null, $chosen_inline_result_local_id, null, null);
-            }
+            return self::insertChosenInlineResultRequest($chosen_inline_result);
         } elseif ($update->getUpdateType() == 'callback_query') {
             $callback_query = $update->getCallbackQuery();
-
-            if (self::insertCallbackQueryRequest($callback_query)) {
-                $callback_query_id = $callback_query->getId();
-                return self::insertTelegramUpdate($update_id, null, null, null, null, $callback_query_id, null);
-            }
+            return self::insertCallbackQueryRequest($callback_query);
         } elseif ($update->getUpdateType() == 'edited_message') {
             $edited_message = $update->getEditedMessage();
-
-            if (self::insertEditedMessageRequest($edited_message)) {
-                $chat_id = $edited_message->getChat()->getId();
-                $edited_message_local_id = self::$pdo->lastInsertId();
-                return self::insertTelegramUpdate($update_id, $chat_id, null, null, null, null, $edited_message_local_id);
-            }
+            return self::insertEditedMessageRequest($edited_message);
         }
 
         return false;

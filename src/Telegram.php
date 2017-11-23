@@ -282,7 +282,7 @@ class Telegram
     }
 
     /**
-     * Handle getUpdates method
+     * Handle handleGetUpdates method
      *
      * @param int|null $limit
      * @param int|null $timeout
@@ -304,6 +304,19 @@ class Telegram
         //As explained in the telegram bot api documentation
         $offset = (isset($last_update[0]['id'])) ? $last_update[0]['id'] + 1 : null;
 
+        return $this->handleGetUpdatesCore($offset, $limit, $timeout);
+    }
+
+    /**
+     * Handle handleGetUpdatesCore method
+     *
+     * @param int|null $limit
+     * @param int|null $timeout
+     *
+     * @return \Longman\TelegramBot\Entities\ServerResponse
+     */
+    public function handleGetUpdatesCore($offset, $limit= null, $timeout = null)
+    {
         $response = Request::getUpdates([
             'offset'  => $offset,
             'limit'   => $limit,
