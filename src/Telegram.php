@@ -315,7 +315,7 @@ class Telegram
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      */
-    public function handleGetUpdatesCore($offset, $limit= null, $timeout = null)
+    public function handleGetUpdatesCore($offset, $limit = null, $timeout = null)
     {
         $response = Request::getUpdates([
             'offset'  => $offset,
