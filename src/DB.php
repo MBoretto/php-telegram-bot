@@ -434,22 +434,18 @@ class DB
      */
     public static function insertRequest(Update &$update)
     {
-        $update_id = $update->getUpdateId();
         if ($update->getUpdateType() == 'message') {
             $message = $update->getMessage();
             return self::insertMessageRequest($message);
-        } elseif ($update->getUpdateType() == 'inline_query') {
-            $inline_query = $update->getInlineQuery();
-            return self::insertInlineQueryRequest($inline_query);
-        } elseif ($update->getUpdateType() == 'chosen_inline_result') {
-            $chosen_inline_result = $update->getChosenInlineResult();
-            return self::insertChosenInlineResultRequest($chosen_inline_result);
         } elseif ($update->getUpdateType() == 'callback_query') {
             $callback_query = $update->getCallbackQuery();
             return self::insertCallbackQueryRequest($callback_query);
+        } elseif ($update->getUpdateType() == 'inline_query') {
+            return true;
+        } elseif ($update->getUpdateType() == 'chosen_inline_result') {
+            return true;
         } elseif ($update->getUpdateType() == 'edited_message') {
-            $edited_message = $update->getEditedMessage();
-            return self::insertEditedMessageRequest($edited_message);
+            return true;
         }
 
         return false;
