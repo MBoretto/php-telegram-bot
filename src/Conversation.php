@@ -30,14 +30,14 @@ class Conversation
      *
      * @var array
      */
-    protected $protected_notes = null;
+    protected $protected_notes = [];
 
     /**
      * Notes to be stored
      *
      * @var array
      */
-    public $notes = null;
+    public $notes = [];
 
     /**
      * Telegram user id
@@ -88,8 +88,8 @@ class Conversation
     protected function clear()
     {
         $this->conversation = null;
-        $this->protected_notes = null;
-        $this->notes = null;
+        $this->protected_notes = [];
+        $this->notes = [];
 
         return true;
     }
