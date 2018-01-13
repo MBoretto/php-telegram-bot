@@ -163,6 +163,7 @@ class Conversation
      */
     public function stop()
     {
+        ConversationDB::deleteConversations(10);
         return ($this->updateStatus('stopped') && $this->clear());
     }
 

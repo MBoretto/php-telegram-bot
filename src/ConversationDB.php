@@ -68,6 +68,34 @@ class ConversationDB extends DB
     }
 
     /**
+     * Delete old stopped or cancelled conversations
+     *
+     * @param int    $limit
+     *
+     * @return bool
+     */
+    public static function deleteConversations($limit = 2)
+    {
+        if (!self::isDbConnected()) {
+            return false;
+        }
+
+        try {
+            $sth = self::$pdo->prepare('DELETE FROM `' . TB_CONVERSATION . '`
+                WHERE status!="active"
+                ORDER BY `id` ASC
+                LIMIT :limit
+               ');
+            $sth->bindParam(':limit', $limit, \PDO::PARAM_INT);
+
+            $status = $sth->execute();
+        } catch (\Exception $e) {
+            throw new TelegramException($e->getMessage());
+        }
+        return $status;
+    }
+
+    /**
      * Insert the conversation in the database
      *
      * @param int    $user_id
