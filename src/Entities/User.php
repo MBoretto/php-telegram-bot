@@ -19,6 +19,7 @@ class User extends Entity
     protected $first_name;
     protected $last_name;
     protected $username;
+    protected $language_code;
 
     /**
      * User constructor.
@@ -37,29 +38,32 @@ class User extends Entity
 
         $this->last_name = isset($data['last_name']) ? $data['last_name'] : null;
         $this->username = isset($data['username']) ? $data['username'] : null;
+        $this->language_code = isset($data['language_code']) ? $data['language_code'] : 'en';
     }
 
     public function getId()
     {
-
         return $this->id;
     }
 
     public function getFirstName()
     {
-
         return $this->first_name;
     }
 
     public function getLastName()
     {
-
         return $this->last_name;
     }
 
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function getLanguageCode()
+    {
+        return $this->language_code;
     }
 
     public function tryMention($markdown = false)

@@ -324,23 +324,25 @@ class DB
         $username = $user->getUsername();
         $first_name = $user->getFirstName();
         $last_name = $user->getLastName();
+        $language_code = $user->getLanguageCode();
 
         try {
             $sth1 = self::$pdo->prepare('INSERT INTO `' . TB_USER . '`
                 (
-                `id`, `username`, `first_name`, `last_name`, `created_at`, `updated_at`
+                `id`, `username`, `first_name`, `last_name`, `language_code`, `created_at`, `updated_at`
                 )
                 VALUES (
-                :id, :username, :first_name, :last_name, :date, :date
+                :id, :username, :first_name, :last_name, :language_code, :date, :date
                 )
                 ON DUPLICATE KEY UPDATE `username`=:username, `first_name`=:first_name,
-                `last_name`=:last_name, `updated_at`=:date
+                `last_name`=:last_name, `language_code`=:language_code , `updated_at`=:date
                 ');
 
             $sth1->bindParam(':id', $user_id, \PDO::PARAM_INT);
             $sth1->bindParam(':username', $username, \PDO::PARAM_STR, 255);
             $sth1->bindParam(':first_name', $first_name, \PDO::PARAM_STR, 255);
             $sth1->bindParam(':last_name', $last_name, \PDO::PARAM_STR, 255);
+            $sth1->bindParam(':language_code', $language_code, \PDO::PARAM_STR, 255);
             $sth1->bindParam(':date', $date, \PDO::PARAM_STR);
 
             $status = $sth1->execute();
