@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `first_name` CHAR(255) NOT NULL DEFAULT '' COMMENT 'User\'s first name',
   `last_name` CHAR(255) DEFAULT NULL COMMENT 'User\'s last name',
   `username` CHAR(255) DEFAULT NULL COMMENT 'User\'s username',
+  `language_code` CHAR(8) DEFAULT NULL COMMENT 'User\'s language_code',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
 
