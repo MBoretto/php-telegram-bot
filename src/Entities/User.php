@@ -38,7 +38,7 @@ class User extends Entity
 
         $this->last_name = isset($data['last_name']) ? $data['last_name'] : null;
         $this->username = isset($data['username']) ? $data['username'] : null;
-        $this->language_code = isset($data['language_code']) ? $data['language_code'] : 'en';
+        $this->language_code = isset($data['language_code']) ? $data['language_code'] : null;
     }
 
     public function getId()
