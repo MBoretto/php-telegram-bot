@@ -438,7 +438,6 @@ class Telegram
             //Handle a generic command or non existing one
             $this->last_command_response = $this->executeCommand('Generic');
         } else {
-
             //execute() method is executed after preExecute()
             //This is to prevent executing a DB query without a valid connection
             $this->last_command_response = $command_obj->preExecute();
