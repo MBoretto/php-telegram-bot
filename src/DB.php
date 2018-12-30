@@ -415,7 +415,7 @@ class DB
                 $sth2->bindParam(':oldid', $migrate_to_chat_id, \PDO::PARAM_INT);
             }
 
-            $sth2->bindParam(':type', $type, \PDO::PARAM_INT);
+            $sth2->bindParam(':type', $type, \PDO::PARAM_STR);
             $sth2->bindParam(':title', $chat_title, \PDO::PARAM_STR, 255);
             $sth2->bindParam(':date', $date, \PDO::PARAM_STR);
 
