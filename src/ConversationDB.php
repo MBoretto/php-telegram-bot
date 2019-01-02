@@ -18,7 +18,7 @@ use Longman\TelegramBot\Exception\TelegramException;
 class ConversationDB extends DB
 {
     /**
-     * Initilize conversation table
+     * Initialize conversation table
      */
     public static function initializeConversation()
     {

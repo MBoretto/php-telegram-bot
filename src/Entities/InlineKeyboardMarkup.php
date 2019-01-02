@@ -38,4 +38,34 @@ class InlineKeyboardMarkup extends Entity
             throw new TelegramException('Inline Keyboard field is empty!');
         }
     }
+
+    /**
+     * Get inlinekeybord raw structure
+     *
+     * @return array
+     */
+    public function getInlineKeyboard()
+    {
+        return $this->inline_keyboard;
+    }
+
+    /**
+     * Merge two inline keyboard in one
+     *
+     * @param InlineKeyboardMarkup
+     */
+    public function prepend(InlineKeyboardMarkup $keyboard)
+    {
+        $this->inline_keyboard = array_merge($keyboard->getInlineKeyboard(), $this->inline_keyboard);
+    }
+
+    /**
+     * Merge two inline keyboard in one
+     *
+     * @param InlineKeyboardMarkup
+     */
+    public function append(InlineKeyboardMarkup $keyboard)
+    {
+        $this->inline_keyboard = array_merge($this->inline_keyboard, $keyboard->getInlineKeyboard());
+    }
 }

@@ -60,6 +60,6 @@ try {
     // log telegram errors
     \Longman\TelegramBot\TelegramLog::error($e);
 } catch (Longman\TelegramBot\Exception\TelegramLogException $e) {
-    // Silence is gold! Uncomment this to catch log initilization errors
+    // Silence is gold! Uncomment this to catch log initialization errors
     //echo $e;
 }

@@ -65,7 +65,7 @@ class TelegramLog
     /**
      * Initialize
      *
-     * Initilize monolog instance. Singleton
+     * Initialize monolog instance. Singleton
      * Is possbile provide an external monolog instance
      *
      * @param \Monolog\Logger
@@ -173,7 +173,7 @@ class TelegramLog
     /**
      * Initialize update log
      *
-     * Initilize monolog instance. Singleton
+     * Initialize monolog instance. Singleton
      * Is possbile provide an external monolog instance
      *
      * @param string $path

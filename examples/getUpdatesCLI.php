@@ -69,6 +69,6 @@ try {
     // log telegram errors
     \Longman\TelegramBot\TelegramLog::error($e);
 } catch (Longman\TelegramBot\Exception\TelegramLogException $e) {
-    //catch log initilization errors
+    //catch log initialization errors
     echo $e;
 }
