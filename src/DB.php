@@ -811,7 +811,7 @@ class DB
             $sth->bindParam(':channel_chat_created', $channel_chat_created, \PDO::PARAM_INT);
             $sth->bindParam(':migrate_from_chat_id', $migrate_from_chat_id, \PDO::PARAM_INT);
             $sth->bindParam(':migrate_to_chat_id', $migrate_to_chat_id, \PDO::PARAM_INT);
-            $sth->bindParam(':pinned_message', $pinned_message, \PDO::PARAM_INT);
+            $sth->bindParam(':pinned_message', $pinned_message, \PDO::PARAM_STR);
 
             return $sth->execute();
         } catch (\PDOException $e) {
