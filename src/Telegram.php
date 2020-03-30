@@ -319,6 +319,7 @@ class Telegram
         if ($response->isOk()) {
             //Process all updates
             foreach ((array) $response->getResult() as $result) {
+                print($result);
                 $this->processUpdate($result);
             }
         }
@@ -374,11 +375,8 @@ class Telegram
         $update_type = $this->update->getUpdateType();
 
         if ($update_type === 'channel_post') {
-            return Request::emptyResponse();
-        }
-
-
-        if (in_array($update_type, ['inline_query', 'chosen_inline_result', 'callback_query', 'edited_message'])) {
+            $command = $this->getCommandFromType($update_type);
+        } elseif (in_array($update_type, ['inline_query', 'chosen_inline_result', 'callback_query', 'edited_message'])) {
             $command = $this->getCommandFromType($update_type);
         } elseif ($update_type === 'message') {
             $message = $this->update->getMessage();
@@ -413,7 +411,9 @@ class Telegram
         //This is necessary to "require" all the necessary command files!
         $this->getCommandsList();
 
-        DB::insertRequest($this->update);
+        if ($update_type !== 'channel_post') {
+            DB::insertRequest($this->update);
+        }
 
         return $this->executeCommand($command);
     }

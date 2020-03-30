@@ -41,6 +41,7 @@ class Update extends Entity
 
         $this->channel_post = isset($data['channel_post']) ? $data['channel_post'] : null;
         if (!empty($this->channel_post)) {
+            $this->channel_post = new Message($this->channel_post, $bot_name);
             $this->update_type = 'channel_post';
         }
 
@@ -89,6 +90,12 @@ class Update extends Entity
     {
         return $this->message;
     }
+
+    public function getChannelPost()
+    {
+        return $this->channel_post;
+    }
+
     public function getEditedMessage()
     {
         return $this->edited_message;
