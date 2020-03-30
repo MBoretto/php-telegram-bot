@@ -319,7 +319,6 @@ class Telegram
         if ($response->isOk()) {
             //Process all updates
             foreach ((array) $response->getResult() as $result) {
-                print($result);
                 $this->processUpdate($result);
             }
         }
