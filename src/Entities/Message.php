@@ -100,7 +100,7 @@ class Message extends Entity
     }
 
     //Common init to Message and ReplyToMessage
-    protected function init(array & $data, & $bot_name)
+    protected function init(array &$data, &$bot_name)
     {
         $this->bot_name = $bot_name;
 

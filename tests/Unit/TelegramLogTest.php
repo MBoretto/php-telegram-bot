@@ -38,7 +38,7 @@ class TelegramLogTest extends TestCase
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // Make sure no monolog instance is set before each test.
         TestHelpers::setStaticProperty('Longman\TelegramBot\TelegramLog', 'monolog', null);
@@ -47,7 +47,7 @@ class TelegramLogTest extends TestCase
     /**
      * tearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // Make sure no logfiles exist.
         foreach ($this->logfiles as $file) {

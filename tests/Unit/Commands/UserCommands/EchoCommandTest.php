@@ -27,7 +27,7 @@ class EchoCommandTest extends CommandTestCase
     /**
      * setUp
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->command = new EchoCommand($this->telegram);

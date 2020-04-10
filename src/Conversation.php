@@ -146,7 +146,8 @@ class Conversation
                 $this->user_id,
                 $this->chat_id,
                 $this->command
-            )) {
+            )
+            ) {
                 return $this->load();
             }
         }

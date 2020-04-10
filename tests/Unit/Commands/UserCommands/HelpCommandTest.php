@@ -26,7 +26,7 @@ class HelpCommandTest extends CommandTestCase
     /**
      * setUp
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->command = new HelpCommand($this->telegram);

@@ -401,7 +401,8 @@ class Telegram
                 'new_chat_photo',
                 'new_chat_title',
                 'supergroup_chat_created',
-            ])) {
+            ])
+            ) {
                 $command = $this->getCommandFromType($type);
             }
         }

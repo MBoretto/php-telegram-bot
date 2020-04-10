@@ -25,42 +25,42 @@ class TelegramLog
      *
      * @var \Monolog\Logger
      */
-    static protected $monolog = null;
+    protected static $monolog = null;
 
     /**
      * Monolog instance for update
      *
      * @var \Monolog\Logger
      */
-    static protected $monolog_update = null;
+    protected static $monolog_update = null;
 
     /**
      * Path for error log
      *
      * @var string
      */
-    static protected $error_log_path = null;
+    protected static $error_log_path = null;
 
     /**
      * Path for debug log
      *
      * @var string
      */
-    static protected $debug_log_path = null;
+    protected static $debug_log_path = null;
 
     /**
      * Path for update log
      *
      * @var string
      */
-    static protected $update_log_path = null;
+    protected static $update_log_path = null;
 
     /**
      * Temporary stream handle for debug log
      *
      * @var null
      */
-    static protected $debug_log_temp_stream_handle = null;
+    protected static $debug_log_temp_stream_handle = null;
 
     /**
      * Initialize

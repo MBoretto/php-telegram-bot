@@ -31,7 +31,7 @@ class ConversationTest extends TestCase
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $credentials = [
             'host'     => PHPUNIT_DB_HOST,

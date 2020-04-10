@@ -38,7 +38,7 @@ class TelegramTest extends TestCase
     /**
     * setUp
     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->telegram = new Telegram('apikey', 'testbot');
 
@@ -51,7 +51,7 @@ class TelegramTest extends TestCase
     /**
      * tearDown
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // Clean up the custom commands paths.
         foreach ($this->custom_commands_paths as $custom_path) {

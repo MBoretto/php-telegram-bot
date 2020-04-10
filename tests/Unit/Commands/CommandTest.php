@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\Unit\Commands;
+//namespace Tests\Unit\Commands;
 
 use Tests\Unit\TestCase;
 use Tests\TestHelpers;
@@ -48,7 +48,7 @@ class CommandTest extends TestCase
      */
     private $command_stub_with_config;
 
-    public function setUp()
+    public function setUp(): void
     {
         //Default command object
         $this->telegram = new Telegram('apikey', 'testbot');
