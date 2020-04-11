@@ -237,7 +237,7 @@ class Conversation
      *
      * @return int
      */
-    public function getUserID()
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -247,7 +247,7 @@ class Conversation
      *
      * @return int
      */
-    public function getChatID()
+    public function getChatId()
     {
         return $this->chat_id;
     }

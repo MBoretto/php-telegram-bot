@@ -50,8 +50,8 @@ class ConversationTest extends TestCase
     public function testConversationThatDoesntExistPropertiesSetCorrectly()
     {
         $conversation = new Conversation(123, 456);
-        $this->assertEquals(123, $conversation->getUserID());
-        $this->assertEquals(456, $conversation->getChatID());
+        $this->assertEquals(123, $conversation->getUseriD());
+        $this->assertEquals(456, $conversation->getChatId());
         $this->assertEquals(null, $conversation->getCommand());
     }
 
@@ -59,8 +59,8 @@ class ConversationTest extends TestCase
     {
         $info = TestHelpers::startFakeConversation();
         $conversation = new Conversation($info['user_id'], $info['chat_id'], 'command');
-        $this->assertEquals($info['user_id'], $conversation->getUserID());
-        $this->assertEquals($info['chat_id'], $conversation->getChatID());
+        $this->assertEquals($info['user_id'], $conversation->getUserId());
+        $this->assertEquals($info['chat_id'], $conversation->getChatId());
         $this->assertEquals('command', $conversation->getCommand());
     }
 
