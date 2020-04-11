@@ -59,19 +59,15 @@ class TelegramTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramException
-     */
     public function testNewInstanceWithoutApiKeyParam()
     {
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramException::class);
         new Telegram(null, 'testbot');
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramException
-     */
     public function testNewInstanceWithoutBotNameParam()
     {
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramException::class);
         new Telegram('apikey', null);
     }
 
@@ -108,28 +104,28 @@ class TelegramTest extends TestCase
     {
         $tg = $this->telegram;
 
-        $this->assertAttributeCount(1, 'commands_paths', $tg);
+        $this->assertEquals(1, $tg->getCommandsPathCount());
 
         $tg->addCommandsPath($this->custom_commands_paths[0]);
-        $this->assertAttributeCount(2, 'commands_paths', $tg);
+        $this->assertEquals(2, $tg->getCommandsPathCount());
 
         $tg->addCommandsPath('/invalid/path');
-        $this->assertAttributeCount(2, 'commands_paths', $tg);
+        $this->assertEquals(2, $tg->getCommandsPathCount());
 
         $tg->addCommandsPaths([
             $this->custom_commands_paths[1],
             $this->custom_commands_paths[2],
         ]);
-        $this->assertAttributeCount(4, 'commands_paths', $tg);
+        $this->assertEquals(4, $tg->getCommandsPathCount());
 
         $tg->addCommandsPath($this->custom_commands_paths[0]);
-        $this->assertAttributeCount(4, 'commands_paths', $tg);
+        $this->assertEquals(4, $tg->getCommandsPathCount());
     }
 
     public function testGetCommandsList()
     {
         $commands = $this->telegram->getCommandsList();
-        $this->assertInternalType('array', $commands);
+        $this-> assertIsArray($commands);
         $this->assertNotCount(0, $commands);
     }
 

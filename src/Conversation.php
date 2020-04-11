@@ -231,4 +231,24 @@ class Conversation
     {
         return $this->command;
     }
+
+    /**
+     * Retrieve the user_id
+     *
+     * @return int
+     */
+    public function getUserID()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * Retrieve the chat_id
+     *
+     * @return int
+     */
+    public function getChatID()
+    {
+        return $this->chat_id;
+    }
 }

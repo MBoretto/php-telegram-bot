@@ -34,9 +34,9 @@ class HelpCommandTest extends CommandTestCase
 
     public function testHelpCommandProperties()
     {
-        $this->assertAttributeEquals('help', 'name', $this->command);
-        $this->assertAttributeEquals('Show bot commands help', 'description', $this->command);
-        $this->assertAttributeEquals('/help or /help <command>', 'usage', $this->command);
+        $this->assertEquals('help', $this->command->getName());
+        $this->assertEquals('Show bot commands help', $this->command->getDescription());
+        $this->assertEquals('/help or /help <command>', $this->command->getUsage());
     }
 
     public function testHelpCommandExecuteWithoutParameter()
@@ -46,7 +46,7 @@ class HelpCommandTest extends CommandTestCase
             ->execute()
             ->getResult()
             ->getText();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'testbot v. ' . $this->telegram->getVersion() . "\n\nCommands List:",
             $text
         );
@@ -69,6 +69,6 @@ class HelpCommandTest extends CommandTestCase
             ->execute()
             ->getResult()
             ->getText();
-        $this->assertContains("Description: Show text\nUsage: /echo <text>", $text);
+        $this->assertStringContainsString("Description: Show text\nUsage: /echo <text>", $text);
     }
 }

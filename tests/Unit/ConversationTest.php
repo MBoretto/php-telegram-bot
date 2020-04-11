@@ -50,18 +50,18 @@ class ConversationTest extends TestCase
     public function testConversationThatDoesntExistPropertiesSetCorrectly()
     {
         $conversation = new Conversation(123, 456);
-        $this->assertAttributeEquals(123, 'user_id', $conversation);
-        $this->assertAttributeEquals(456, 'chat_id', $conversation);
-        $this->assertAttributeEquals(null, 'command', $conversation);
+        $this->assertEquals(123, $conversation->getUserID());
+        $this->assertEquals(456, $conversation->getChatID());
+        $this->assertEquals(null, $conversation->getCommand());
     }
 
     public function testConversationThatExistsPropertiesSetCorrectly()
     {
         $info = TestHelpers::startFakeConversation();
         $conversation = new Conversation($info['user_id'], $info['chat_id'], 'command');
-        $this->assertAttributeEquals($info['user_id'], 'user_id', $conversation);
-        $this->assertAttributeEquals($info['chat_id'], 'chat_id', $conversation);
-        $this->assertAttributeEquals('command', 'command', $conversation);
+        $this->assertEquals($info['user_id'], $conversation->getUserID());
+        $this->assertEquals($info['chat_id'], $conversation->getChatID());
+        $this->assertEquals('command', $conversation->getCommand());
     }
 
     public function testConversationThatDoesntExistWithoutCommand()
@@ -71,11 +71,10 @@ class ConversationTest extends TestCase
         $this->assertNull($conversation->getCommand());
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramException
-     */
     public function testConversationThatDoesntExistWithCommand()
     {
+        TestHelpers::startFakeConversation();
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramException::class);
         new Conversation(1, 1, 'command');
     }
 

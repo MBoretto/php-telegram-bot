@@ -69,7 +69,6 @@ class CommandTest extends TestCase
     {
         $error_message = 'must be an instance of Longman\TelegramBot\Telegram';
         $params_to_test = [
-            [],
             [null],
             ['something'],
             [new \stdClass],
@@ -79,62 +78,46 @@ class CommandTest extends TestCase
             try {
                 $this->getMockForAbstractClass($this->command_namespace, $param);
             } catch (\Exception $e) {
-                $this->assertContains($error_message, $e->getMessage());
+                $this->assertStringContainsString($error_message, $e->getMessage());
             } catch (\Throwable $e) { //For PHP7
-                $this->assertContains($error_message, $e->getMessage());
+                $this->assertStringContainsString($error_message, $e->getMessage());
             }
         }
     }
 
-    public function testCommandHasCorrectTelegramObject()
-    {
-        $this->assertAttributeEquals($this->telegram, 'telegram', $this->command_stub);
-        $this->assertSame($this->telegram, $this->command_stub->getTelegram());
-    }
-
     public function testDefaultCommandName()
     {
-        $this->assertAttributeEquals('', 'name', $this->command_stub);
         $this->assertEmpty($this->command_stub->getName());
     }
 
     public function testDefaultCommandDescription()
     {
-        $this->assertAttributeEquals('Command description', 'description', $this->command_stub);
         $this->assertEquals('Command description', $this->command_stub->getDescription());
     }
 
     public function testDefaultCommandUsage()
     {
-        $this->assertAttributeEquals('Command usage', 'usage', $this->command_stub);
         $this->assertEquals('Command usage', $this->command_stub->getUsage());
     }
 
     public function testDefaultCommandVersion()
     {
-        $this->assertAttributeEquals('1.0.0', 'version', $this->command_stub);
         $this->assertEquals('1.0.0', $this->command_stub->getVersion());
     }
 
     public function testDefaultCommandIsEnabled()
     {
-        $this->assertAttributeEquals(true, 'enabled', $this->command_stub);
         $this->assertTrue($this->command_stub->isEnabled());
-    }
-
-    public function testDefaultCommandNeedsMysql()
-    {
-        $this->assertAttributeEquals(false, 'need_mysql', $this->command_stub);
     }
 
     public function testDefaultCommandEmptyConfig()
     {
-        $this->assertAttributeEquals([], 'config', $this->command_stub);
+        $this->assertEquals([], $this->command_stub->getConfig());
     }
 
     public function testDefaultCommandUpdateNull()
     {
-        $this->assertAttributeEquals(null, 'update', $this->command_stub);
+        $this->assertEquals(null, $this->command_stub->getUpdate());
     }
 
     public function testCommandSetUpdateAndMessage()
@@ -152,20 +135,17 @@ class CommandTest extends TestCase
         $update = TestHelpers::getFakeUpdateObject();
         $message = $update->getMessage();
         $stub->setUpdate($update);
-        $this->assertAttributeEquals($update, 'update', $stub);
         $this->assertEquals($update, $stub->getUpdate());
-        $this->assertAttributeEquals($message, 'message', $stub);
         $this->assertEquals($message, $stub->getMessage());
     }
 
     public function testCommandWithConfigNotEmptyConfig()
     {
-        $this->assertAttributeNotEmpty('config', $this->command_stub_with_config);
+        $this->assertNotEmpty($this->command_stub_with_config->getConfig());
     }
 
     public function testCommandWithConfigCorrectConfig()
     {
-        $this->assertAttributeEquals(['config_key' => 'config_value'], 'config', $this->command_stub_with_config);
         $this->assertEquals(['config_key' => 'config_value'], $this->command_stub_with_config->getConfig(null));
         $this->assertEquals(['config_key' => 'config_value'], $this->command_stub_with_config->getConfig());
         $this->assertEquals('config_value', $this->command_stub_with_config->getConfig('config_key'));

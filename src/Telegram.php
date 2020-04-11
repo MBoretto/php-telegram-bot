@@ -759,4 +759,14 @@ class Telegram
     {
         return mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding) . mb_strtolower(mb_substr($str, 1, mb_strlen($str), $encoding), $encoding);
     }
+
+    /**
+     * Get the number of command path added
+     *
+     * @return int
+     */
+    public function getCommandsPathCount()
+    {
+        return count($this->commands_paths);
+    }
 }

@@ -81,6 +81,8 @@ class Request
         'editMessageText',
         'editMessageCaption',
         'editMessageReplyMarkup',
+        'setMyCommands',
+        'getMyCommands',
     ];
 
     /**
@@ -172,7 +174,7 @@ class Request
         $debug_handle = TelegramLog::getDebugLogTempStream();
 
         //Fix so that the keyboard markup is a string, not an object
-        if (isset($data['reply_markup']) && !is_string($data['reply_markup'])) {
+        if (isset($data['reply_markup']) and !is_string($data['reply_markup'])) {
             $data['reply_markup'] = (string)$data['reply_markup'];
         }
 
@@ -180,17 +182,19 @@ class Request
 
         //Check for resources in data
         $contains_resource = false;
-        foreach ($data as $item) {
-            if (is_resource($item)) {
-                $contains_resource = true;
-                break;
+        if (is_array($data)) {
+            foreach ($data as $item) {
+                if (is_resource($item)) {
+                    $contains_resource = true;
+                    break;
+                }
             }
         }
 
         //Reformat data array in multipart way
         if ($contains_resource) {
             foreach ($data as $key => $item) {
-                $request_params['multipart'][] = array('name' => $key, 'contents' => $item);
+                $request_params['multipart'][] = ['name' => $key, 'contents' => $item];
             }
         } else {
             $request_params['form_params'] = $data;
@@ -801,19 +805,28 @@ class Request
     }
 
     /**
-     * Edit message reply markup
+     * Get bot commands
      *
      * @param array $data
      *
      * @return mixed
      */
-    public static function editMessageReplyMarkup(array $data)
+    public static function getMyCommands()
+    {
+        return self::send('getMyCommands');
+    }
+
+    /**
+     * Set bot commands
+     *
+     * @return mixed
+     */
+    public static function setMyCommands(array $data)
     {
         if (empty($data)) {
             throw new TelegramException('Data is empty!');
         }
-
-        return self::send('editMessageReplyMarkup', $data);
+        return self::send('setMyCommands', $data);
     }
 
     /**

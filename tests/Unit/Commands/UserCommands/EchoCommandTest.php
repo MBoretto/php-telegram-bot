@@ -35,9 +35,9 @@ class EchoCommandTest extends CommandTestCase
 
     public function testEchoCommandProperties()
     {
-        $this->assertAttributeEquals('echo', 'name', $this->command);
-        $this->assertAttributeEquals('Show text', 'description', $this->command);
-        $this->assertAttributeEquals('/echo <text>', 'usage', $this->command);
+        $this->assertEquals('echo', $this->command->getName());
+        $this->assertEquals('Show text', $this->command->getDescription());
+        $this->assertEquals('/echo <text>', $this->command->getUsage());
     }
 
     public function testEchoCommandExecuteWithoutParameter()

@@ -25,20 +25,13 @@ class ServerResponse extends Entity
      */
     public function __construct(array $data, $bot_name)
     {
-        if (isset($data['ok']) & isset($data['result'])) {
+        if (isset($data['ok']) and isset($data['result'])) {
             if (is_array($data['result'])) {
-                if ($data['ok'] & !$this->isAssoc($data['result']) & !isset($data['result'][0]['user'])) {
-                    //Get Update
-                    foreach ($data['result'] as $update) {
-                        $this->result[] = new Update($update, $bot_name);
-                    }
-                } elseif ($data['ok'] & !$this->isAssoc($data['result']) & isset($data['result'][0]['user'])) {
-                    //Response from getChatAdministrators
-                    $this->result = [];
-                    foreach ($data['result'] as $user) {
-                        array_push($this->result, new ChatMember($user));
-                    }
-                } elseif ($data['ok'] & $this->isAssoc($data['result'])) {
+                $this->ok = $data['ok'];
+                $this->error_code = null;
+                $this->description = null;
+
+                if ($this->isAssoc($data['result'])) {
                     if (isset($data['result']['total_count'])) {
                         //Response from getUserProfilePhotos
                         $this->result = new UserProfilePhotos($data['result']);
@@ -58,13 +51,33 @@ class ServerResponse extends Entity
                         //Response from sendMessage
                         $this->result = new Message($data['result'], $bot_name);
                     }
+                    return;
                 }
-    
-                $this->ok = $data['ok'];
-                $this->error_code = null;
-                $this->description = null;
+
+                //Response from getChatAdministrators
+                if (isset($data['result'][0]['user'])) {
+                    $this->result = [];
+                    foreach ($data['result'] as $user) {
+                        array_push($this->result, new ChatMember($user));
+                    }
+                    return;
+                }
+
+                // Get My Command response
+                if (isset($data['result'][0]['command'])) {
+                    foreach ($data['result'] as $bot_command) {
+                        $this->result[] = new BotCommand($bot_command, $bot_name);
+                    }
+                    return;
+                }
+
+                //Get Update
+                foreach ($data['result'] as $update) {
+                    $this->result[] = new Update($update, $bot_name);
+                }
+                return;
             } else {
-                if ($data['ok'] & $data['result'] === true) {
+                if ($data['ok'] and $data['result'] === true) {
                     //Response from setWebhook set
                     $this->ok = $data['ok'];
                     $this->result = true;
@@ -106,8 +119,6 @@ class ServerResponse extends Entity
             } else {
                 $this->description = null;
             }
-
-            //throw new TelegramException('ok(variable) is not set!');
         }
     }
 

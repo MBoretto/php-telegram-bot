@@ -55,27 +55,21 @@ class TelegramLogTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramLogException
-     */
     public function testNewInstanceWithoutErrorPath()
     {
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramLogException::class);
         TelegramLog::initErrorLog('');
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramLogException
-     */
     public function testNewInstanceWithoutDebugPath()
     {
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramLogException::class);
         TelegramLog::initDebugLog('');
     }
 
-    /**
-     * @expectedException \Longman\TelegramBot\Exception\TelegramLogException
-     */
     public function testNewInstanceWithoutUpdatePath()
     {
+        $this->expectException(\Longman\TelegramBot\Exception\TelegramLogException::class);
         TelegramLog::initUpdateLog('');
     }
 
@@ -86,7 +80,7 @@ class TelegramLogTest extends TestCase
         TelegramLog::initErrorLog($file);
         TelegramLog::error('my error');
         $this->assertFileExists($file);
-        $this->assertContains('bot_log.ERROR: my error', file_get_contents($file));
+        $this->assertStringContainsString('bot_log.ERROR: my error', file_get_contents($file));
     }
 
     public function testDebugStream()
@@ -96,7 +90,7 @@ class TelegramLogTest extends TestCase
         TelegramLog::initDebugLog($file);
         TelegramLog::debug('my debug');
         $this->assertFileExists($file);
-        $this->assertContains('bot_log.DEBUG: my debug', file_get_contents($file));
+        $this->assertStringContainsString('bot_log.DEBUG: my debug', file_get_contents($file));
     }
 
     public function testUpdateStream()
@@ -106,7 +100,7 @@ class TelegramLogTest extends TestCase
         TelegramLog::initUpdateLog($file);
         TelegramLog::update('my update');
         $this->assertFileExists($file);
-        $this->assertContains('my update', file_get_contents($file));
+        $this->assertStringContainsString('my update', file_get_contents($file));
     }
 
     public function testExternalStream()
@@ -124,7 +118,7 @@ class TelegramLogTest extends TestCase
 
         $this->assertFileExists($file);
         $file_contents = file_get_contents($file);
-        $this->assertContains('bot_update_log.ERROR: my error', $file_contents);
-        $this->assertContains('bot_update_log.DEBUG: my debug', $file_contents);
+        $this->assertStringContainsString('bot_update_log.ERROR: my error', $file_contents);
+        $this->assertStringContainsString('bot_update_log.DEBUG: my debug', $file_contents);
     }
 }
