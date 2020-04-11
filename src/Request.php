@@ -805,6 +805,22 @@ class Request
     }
 
     /**
+     * Edit message reply markup
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public static function editMessageReplyMarkup(array $data)
+    {
+        if (empty($data)) {
+            throw new TelegramException('Data is empty!');
+        }
+
+        return self::send('editMessageReplyMarkup', $data);
+    }
+
+    /**
      * Get bot commands
      *
      * @param array $data
