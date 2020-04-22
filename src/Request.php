@@ -206,7 +206,8 @@ class Request
                 $request_params
             );
         } catch (RequestException $e) {
-            throw new TelegramException($e->getMessage());
+            //throw new TelegramException($e->getMessage());
+            throw new TelegramException($e->getResponse()->getBody()->getContents());
         } finally {
             //Logging verbose debug output
             TelegramLog::endDebugLogTempStream("Verbose HTTP Request output:\n%s\n");
@@ -249,7 +250,8 @@ class Request
                 ['debug' => $debug_handle, 'sink' => $loc_path]
             );
         } catch (RequestException $e) {
-            throw new TelegramException($e->getMessage());
+            //throw new TelegramException($e->getMessage());
+            throw new TelegramException($e->getResponse()->getBody()->getContents());
         } finally {
             //Logging verbose debug output
             TelegramLog::endDebugLogTempStream("Verbose HTTP File Download Request output:\n%s\n");
