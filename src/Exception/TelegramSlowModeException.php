@@ -1,6 +1,7 @@
 <?php
 
 namespace Longman\TelegramBot\Exception;
+
 /**
  * Main exception class used for exception handling
  */

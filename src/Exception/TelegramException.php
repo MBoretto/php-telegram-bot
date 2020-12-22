@@ -23,7 +23,8 @@ class TelegramException extends \Exception
     protected $parameters = [];
 
     // Redefine the exception so message isn't optional
-    public function __construct($message, $code = 0, Exception $previous = null) {
+    public function __construct($message, $code = 0, Exception $previous = null)
+    {
         $data = json_decode($message, true);
         $this->parameters = $data['parameters'];
         //$data['description']
