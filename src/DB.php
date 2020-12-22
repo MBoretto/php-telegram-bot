@@ -834,6 +834,13 @@ class DB
         }
 
         $from = $edited_message->getFrom();
+        $from_id = $from->getId();
+
+        // Don't save the messages edited by myself
+        if ($from_id == $this->telegram->getBotUserId()) {
+            return;
+        }
+
         $chat = $edited_message->getChat();
 
         $chat_id = $chat->getId();
@@ -858,7 +865,6 @@ class DB
                 )');
 
             $message_id = $edited_message->getMessageId();
-            $from_id = $from->getId();
 
             $text = $edited_message->getText();
             $caption = $edited_message->getCaption();

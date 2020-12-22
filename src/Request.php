@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\RequestException;
 use Longman\TelegramBot\Entities\File;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
+use Longman\TelegramBot\Exception\TelegramSlowModeException;
 
 class Request
 {
@@ -83,6 +84,8 @@ class Request
         'editMessageReplyMarkup',
         'setMyCommands',
         'getMyCommands',
+        'promoteChatMember',
+        'restrictChatMember',
     ];
 
     /**
@@ -207,7 +210,14 @@ class Request
             );
         } catch (RequestException $e) {
             //throw new TelegramException($e->getMessage());
-            throw new TelegramException($e->getResponse()->getBody()->getContents());
+            $error_code = $e->getResponse()->getStatusCode();
+            if ($error_code == 429) {
+                //echo Psr7\Message::toString($e->getRequest());
+                //echo Psr7\Message::toString($e->getResponse());
+                //print($e);
+                throw new TelegramSlowModeException($e->getResponse()->getBody()->getContents(), $error_code);
+            }
+            throw new TelegramException($e->getResponse()->getBody()->getContents(), $error_code);
         } finally {
             //Logging verbose debug output
             TelegramLog::endDebugLogTempStream("Verbose HTTP Request output:\n%s\n");
@@ -845,6 +855,55 @@ class Request
             throw new TelegramException('Data is empty!');
         }
         return self::send('setMyCommands', $data);
+    }
+
+    /**
+     * Promote chat member
+     *
+     * @return mixed
+     */
+    public static function promoteChatMember(array $data)
+    {
+        if (empty($data)) {
+            throw new TelegramException('Data is empty!');
+        }
+        return self::send('promoteChatMember', $data);
+    }
+
+    /**
+     * Demote chat member
+     *
+     * @return mixed
+     */
+    public static function demoteChatMember(int $chat_id, int $user_id)
+    {
+        $data = [
+            'chat_id' => $chat_id,
+            'user_id' => $user_id,
+            'is_anonymous' => false,
+            'can_change_info' => false,
+            'can_post_messages' => false,
+            'can_edit_messages' => false,
+            'can_delete_messages' => false,
+            'can_invite_users' => false,
+            'can_restrict_members' => false,
+            'can_pin_messages' => false,
+            'can_promote_members' => false
+        ];
+        return self::promoteChatMember($data);
+    }
+
+    /**
+     * Restrict chat member
+     *
+     * @return mixed
+     */
+    public static function restrictChatMember(array $data)
+    {
+        if (empty($data)) {
+            throw new TelegramException('Data is empty!');
+        }
+        return self::send('restrictChatMember', $data);
     }
 
     /**
