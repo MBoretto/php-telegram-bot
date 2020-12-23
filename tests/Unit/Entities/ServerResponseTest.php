@@ -56,16 +56,19 @@ class ServerResponseTest extends TestCase
 
         //Message
         $this->assertEquals('1234', $server_result->getMessageId());
+
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\User', $server_result->getFrom());
         $this->assertEquals('123456789', $server_result->getFrom()->getId());
         $this->assertEquals('botname', $server_result->getFrom()->getFirstName());
         $this->assertEquals('namebot', $server_result->getFrom()->getUserName());
+
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\Chat', $server_result->getChat());
         $this->assertEquals('123456789', $server_result->getChat()->getId());
         $this->assertEquals('john', $server_result->getChat()->getFirstName());
         $this->assertEquals('Mjohn', $server_result->getChat()->getUserName());
+
         $this->assertEquals('1441378360', $server_result->getDate());
         $this->assertEquals('hello', $server_result->getText());
-        //... they are not finished...
-
     }
 
     public function sendMessageFail()
@@ -252,6 +255,198 @@ class ServerResponseTest extends TestCase
 
         $this->assertInstanceOf('\Longman\TelegramBot\Entities\File', $this->server->getResult());
     }
+
+    public function getChat()
+    {
+        //Request::getChat(['chat_id' => $chat_id])
+        return '{
+            "ok":true,
+            "result":{
+                "id":-1001036309999,
+                "title":"TestChat",
+                "username":"testchat",
+                "type":"supergroup",
+                "description":"Bot testing",
+                "permissions":{
+                    "can_send_messages":true,
+                    "can_send_media_messages":false,
+                    "can_send_polls":false,
+                    "can_send_other_messages":false,
+                    "can_add_web_page_previews":false,
+                    "can_change_info":false,
+                    "can_invite_users":false,
+                    "can_pin_messages":false
+                },
+                "slow_mode_delay":60,
+                "photo":{
+                    "small_file_id":"aqadbaatYGUlgGaeaGadScQw7rB___-Y4AWeEQkXXR_raaiEBA",
+                    "small_file_unique_id":"aqaDYGUlgGaev9EAAg",
+                    "big_file_id":"aqadBaatYGuLggaeaWaDscQw7Rb___-y4AWeeQkXxShraaIEbA",
+                    "big_file_unique_id":"AqadYGUlgGaewDeaaG"
+                }
+            }
+        }';
+    }
+
+    public function testGetChat()
+    {
+        $result = $this->getChat();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+        $server_result = $this->server->getResult();
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\Chat', $server_result);
+        $this->assertEquals(60, $server_result->getSlowModeDelay());
+    }
+
+    public function getMe()
+    {
+        //Request::getMe();
+        return '{
+            "ok":true,
+            "result":{
+                "id":107647101,
+                "is_bot":true,
+                "first_name":"Bottone",
+                "username":"Tonebot",
+                "can_join_groups":true,
+                "can_read_all_group_messages":false,
+                "supports_inline_queries":true
+            }
+        }';
+    }
+
+    public function testGetMe()
+    {
+        $result = $this->getMe();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+        $server_result = $this->server->getResult();
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\User', $server_result);
+    }
+
+    public function sendChatAction()
+    {
+        //Request::sendChatAction(['chat_id' => $this->getMessage()->getChat()->getId(), 'action' => 'typing']);
+        return '{"ok":true,"result":true}';
+    }
+
+    public function testsendChatAction()
+    {
+        $result = $this->sendChatAction();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+        $this->assertTrue($this->server->getResult());
+    }
+
+    public function getChatAdministrator()
+    {
+        //Request::getChatAdministrators(['chat_id' => $chat_id]);
+        return '{
+            "ok":true,
+            "result":[
+                {"user":{
+                    "id":123456,
+                    "is_bot":true,
+                    "first_name": "Mybot",
+                    "username":"Mybotbot"
+                    },
+                "status":"administrator",
+                "can_be_edited":false,
+                "can_change_info":true,
+                "can_delete_messages":true,
+                "can_invite_users":true,
+                "can_restrict_members":true,
+                "can_pin_messages":true,
+                "can_promote_members":false,
+                "is_anonymous":false},
+                {"user":{
+                    "id":12345663,
+                    "is_bot":false,
+                    "first_name":"Tom",
+                    "last_name":"John",
+                    "username":"tjohn",
+                    "language_code":"ien"},
+                    "status":"creator",
+                    "is_anonymous":false}
+                ]
+            }';
+    }
+
+    public function testGetChatAdministrator()
+    {
+        $result = $this->getChatAdministrator();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+
+        $this->assertCount(2, $this->server->getResult());
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\ChatMember', $this->server->getResult()[0]);
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\ChatMember', $this->server->getResult()[1]);
+    }
+
+
+    public function getChatMember()
+    {
+        //Request::getChatMember(['chat_id' => $chat_id, 'user_id' => $user_id]);
+        return '{
+            "ok":true,
+            "result": {
+                "user":{
+                    "id":12345,
+                    "is_bot":false,
+                    "first_name":"Tom",
+                    "last_name":"John",
+                    "username":"tJohn",
+                    "language_code":"en"},
+                "status":"creator",
+                "is_anonymous":false
+            }
+        }';
+    }
+
+    public function testGetChatMember()
+    {
+        $result = $this->getChatMember();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\ChatMember', $this->server->getResult());
+    }
+
+    public function getMyCommands()
+    {
+        // Request::getMyCommands();
+        return '{
+            "ok":true,
+            "result":[
+                {"command":"settings","description":"Set your settings"},
+                {"command":"help","description":"Need help?"},
+                {"command":"donate","description":"Make a donation!"}
+            ]
+        }';
+    }
+
+    public function testGetMyCommands()
+    {
+        $result = $this->getMyCommands();
+        $this->server = new ServerResponse(json_decode($result, true), 'testbot');
+
+        $this->assertTrue($this->server->isOk());
+
+        $this->assertCount(3, $this->server->getResult());
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\BotCommand', $this->server->getResult()[0]);
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\BotCommand', $this->server->getResult()[1]);
+        $this->assertInstanceOf('\Longman\TelegramBot\Entities\BotCommand', $this->server->getResult()[2]);
+    }
+
+    //TODO
+    //Request::editMessageText($data);
+    //Request::editMessageReplyMarkup($data);
+    //Request::answerCallbackQuery($data);
+    //Request::setMyCommands($data);
 
     public function testSetGeneralTestFakeResponse() {
         //setWebhook ok

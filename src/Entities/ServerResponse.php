@@ -1,12 +1,4 @@
 <?php
-/**
- * This file is part of the TelegramBot package.
- *
- * (c) Avtandil Kikabidze aka LONGMAN <akalongman@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 
 namespace Longman\TelegramBot\Entities;
 
@@ -25,32 +17,40 @@ class ServerResponse extends Entity
      */
     public function __construct(array $data, $bot_name)
     {
+        $this->error_code = null;
+        $this->description = null;
+        $this->result = null;
         if (isset($data['ok']) and isset($data['result'])) {
+            $this->ok = $data['ok'];
             if (is_array($data['result'])) {
-                $this->ok = $data['ok'];
-                $this->error_code = null;
-                $this->description = null;
-
                 if ($this->isAssoc($data['result'])) {
                     if (isset($data['result']['total_count'])) {
                         //Response from getUserProfilePhotos
                         $this->result = new UserProfilePhotos($data['result']);
-                    } elseif (isset($data['result']['file_id'])) {
+                        return;
+                    }
+                    if (isset($data['result']['file_id'])) {
                         //Response from getFile
                         $this->result = new File($data['result']);
-                    } elseif (isset($data['result']['username'])) {
-                        //Response from getMe
-                        $this->result = new User($data['result']);
-                    } elseif (isset($data['result']['id'])) {
+                        return;
+                    }
+                    if (isset($data['result']['type'])) {
                         //Response from getChat
                         $this->result = new Chat($data['result']);
-                    } elseif (isset($data['result']['user'])) {
+                        return;
+                    }
+                    if (isset($data['result']['username'])) {
+                        //Response from getMe
+                        $this->result = new User($data['result']);
+                        return;
+                    }
+                    if (isset($data['result']['user'])) {
                         //Response from getChatMember
                         $this->result = new ChatMember($data['result']);
-                    } else {
-                        //Response from sendMessage
-                        $this->result = new Message($data['result'], $bot_name);
+                        return;
                     }
+                    //Response from sendMessage
+                    $this->result = new Message($data['result'], $bot_name);
                     return;
                 }
 
@@ -76,50 +76,43 @@ class ServerResponse extends Entity
                     $this->result[] = new Update($update, $bot_name);
                 }
                 return;
-            } else {
-                if ($data['ok'] and $data['result'] === true) {
-                    //Response from setWebhook set
-                    $this->ok = $data['ok'];
-                    $this->result = true;
-                    $this->error_code = null;
+            }
+            if ($data['ok'] and $data['result'] === true) {
+                //Response from setWebhook set
+                $this->result = true;
 
-                    if (isset($data['description'])) {
-                        $this->description = $data['description'];
-                    } else {
-                        $this->description = '';
-                    }
-                } elseif (is_numeric($data['result'])) {
-                    //Response from getChatMembersCount
-                    $this->result = $data['result'];
-                } else {
-                    $this->ok = false;
-                    $this->result = null;
-                    $this->error_code = $data['error_code'];
+                if (isset($data['description'])) {
                     $this->description = $data['description'];
                 }
+                return;
             }
-        } else {
-            //webHook not set
-            $this->ok = false;
-
-            if (isset($data['result'])) {
+            if (is_numeric($data['result'])) {
+                //Response from getChatMembersCount
                 $this->result = $data['result'];
-            } else {
-                $this->result = null;
+                return;
             }
 
-            if (isset($data['error_code'])) {
-                $this->error_code = $data['error_code'];
-            } else {
-                $this->error_code = null;
-            }
-
-            if (isset($data['description'])) {
-                $this->description = $data['description'];
-            } else {
-                $this->description = null;
-            }
+            $this->ok = false;
+            $this->error_code = $data['error_code'];
+            $this->description = $data['description'];
+            return;
         }
+
+        //webHook not set
+        $this->ok = false;
+
+        if (isset($data['result'])) {
+            $this->result = $data['result'];
+        }
+
+        if (isset($data['error_code'])) {
+            $this->error_code = $data['error_code'];
+        }
+
+        if (isset($data['description'])) {
+            $this->description = $data['description'];
+        }
+        return;
     }
 
     //must be an array
