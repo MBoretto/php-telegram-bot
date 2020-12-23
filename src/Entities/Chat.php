@@ -20,6 +20,7 @@ class Chat extends Entity
     protected $username;
     protected $first_name;
     protected $last_name;
+    protected $slow_mode_delay;
 
     /**
      * Chat constructor.
@@ -49,6 +50,7 @@ class Chat extends Entity
         $this->first_name = isset($data['first_name']) ? $data['first_name'] : null;
         $this->last_name = isset($data['last_name']) ? $data['last_name'] : null;
         $this->username = isset($data['username']) ? $data['username'] : null;
+        $this->slow_mode_delay = isset($data['slow_mode_delay']) ? $data['slow_mode_delay'] : null;
     }
 
     public function isGroupChat()
@@ -111,6 +113,11 @@ class Chat extends Entity
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function getSlowModeDelay()
+    {
+        return $this->slow_mode_delay;
     }
 
     public function tryMention()

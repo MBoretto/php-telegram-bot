@@ -837,7 +837,7 @@ class DB
         $from_id = $from->getId();
 
         // Don't save the messages edited by myself
-        if ($from_id == self::telegram->getBotUserId()) {
+        if ($from_id == self::$telegram->getBotUserId()) {
             return;
         }
 

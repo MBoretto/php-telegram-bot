@@ -11,11 +11,11 @@
 namespace Longman\TelegramBot;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use Longman\TelegramBot\Entities\File;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
-use Longman\TelegramBot\Exception\TelegramSlowModeException;
+use Longman\TelegramBot\Exception\Request\RequestException;
+use Longman\TelegramBot\Exception\Request\TooManyRequests;
 
 class Request
 {
@@ -208,16 +208,15 @@ class Request
                 '/bot' . self::$telegram->getApiKey() . '/' . $action,
                 $request_params
             );
-        } catch (RequestException $e) {
-            //throw new TelegramException($e->getMessage());
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
             $error_code = $e->getResponse()->getStatusCode();
             if ($error_code == 429) {
                 //echo Psr7\Message::toString($e->getRequest());
                 //echo Psr7\Message::toString($e->getResponse());
                 //print($e);
-                throw new TelegramSlowModeException($e->getResponse()->getBody()->getContents(), $error_code);
+                throw new TooManyRequests($e->getResponse()->getBody()->getContents(), $error_code);
             }
-            throw new TelegramException($e->getResponse()->getBody()->getContents(), $error_code);
+            throw new RequestException($e->getResponse()->getBody()->getContents(), $error_code);
         } finally {
             //Logging verbose debug output
             TelegramLog::endDebugLogTempStream("Verbose HTTP Request output:\n%s\n");
@@ -259,14 +258,13 @@ class Request
                 '/file/bot' . self::$telegram->getApiKey() . '/' . $path,
                 ['debug' => $debug_handle, 'sink' => $loc_path]
             );
-        } catch (RequestException $e) {
-            //throw new TelegramException($e->getMessage());
-            throw new TelegramException($e->getResponse()->getBody()->getContents());
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $error_code = $e->getResponse()->getStatusCode();
+            throw new RequestException($e->getResponse()->getBody()->getContents(), $error_code);
         } finally {
             //Logging verbose debug output
             TelegramLog::endDebugLogTempStream("Verbose HTTP File Download Request output:\n%s\n");
         }
-
         return (filesize($loc_path) > 0);
     }
 
