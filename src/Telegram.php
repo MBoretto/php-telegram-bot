@@ -725,7 +725,7 @@ class Telegram
     public function setWebHook(
         $url,
         $max_connections = null,
-        $path_certificate = null
+        $path_certificate = null,
         $drop_pending_updates = False // Do not drop the updates by default
     ) {
         if (empty($url)) {
