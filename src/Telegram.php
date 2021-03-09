@@ -718,16 +718,21 @@ class Telegram
      * @param string       $url
      * @param int|null  $path_certificate
      * @param string|null  $path_certificate
+     * @param boolean $drop_pending_updates
      *
      * @return \Longman\TelegramBot\Entities\ServerResponse
      */
-    public function setWebHook($url, $max_connections = null, $path_certificate = null)
-    {
+    public function setWebHook(
+        $url,
+        $max_connections = null,
+        $path_certificate = null
+        $drop_pending_updates = False // Do not drop the updates by default
+    ) {
         if (empty($url)) {
             throw new TelegramException('Hook url is empty!');
         }
 
-        $result = Request::setWebhook($url, $max_connections, $path_certificate);
+        $result = Request::setWebhook($url, $max_connections, $path_certificate, $drop_pending_updates);
 
         if (!$result->isOk()) {
             throw new TelegramException(

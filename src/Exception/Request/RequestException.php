@@ -18,7 +18,9 @@ class RequestException extends \Exception
     public function __construct($message, $code = 0, Exception $previous = null)
     {
         $data = json_decode($message, true);
-        $this->parameters = $data['parameters'];
+        if (array_key_exists('parameters', $data)) {
+            $this->parameters['parameters'] = $data['parameters'];
+        }
         //$data['description']
         // make sure everything is assigned properly
         parent::__construct($data['description'], $code, $previous);
@@ -33,6 +35,9 @@ class RequestException extends \Exception
      */
     public function getParameters($key)
     {
-        return $this->parameters[$key];
+        if (array_key_exists($key, $this->parameters)) {
+            return $this->parameters[$key];
+        }
+        return null;
     }
 }

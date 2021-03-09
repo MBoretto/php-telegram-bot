@@ -592,18 +592,26 @@ class Request
     }
 
     /**
-     * Set webhook
+     * Set or unset the webhook
      *
      * @param string $url
      * @param int $max_connections
      * @param string $file
+     * @param boolean $drop_pending_updates
      *
      * @return mixed
      */
-    public static function setWebhook($url = '', $max_connections = null, $file = null)
-    {
+    public static function setWebhook(
+        $url = '',
+        $max_connections = null,
+        $file = null,
+        $drop_pending_updates = False // Do not drop the updates by default
+    ) {
         $data['url'] = $url;
 
+        if ($drop_pending_updates == True) {
+            $data['drop_pending_updates'] = True;
+        }
         if ($max_connections !== null) {
             $data['max_connections'] = $max_connections;
         }
