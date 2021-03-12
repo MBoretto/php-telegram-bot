@@ -605,12 +605,12 @@ class Request
         $url = '',
         $max_connections = null,
         $file = null,
-        $drop_pending_updates = False // Do not drop the updates by default
+        $drop_pending_updates = false // Do not drop the updates by default
     ) {
         $data['url'] = $url;
 
-        if ($drop_pending_updates == True) {
-            $data['drop_pending_updates'] = True;
+        if ($drop_pending_updates == true) {
+            $data['drop_pending_updates'] = true;
         }
         if ($max_connections !== null) {
             $data['max_connections'] = $max_connections;

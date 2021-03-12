@@ -726,7 +726,7 @@ class Telegram
         $url,
         $max_connections = null,
         $path_certificate = null,
-        $drop_pending_updates = False // Do not drop the updates by default
+        $drop_pending_updates = false // Do not drop the updates by default
     ) {
         if (empty($url)) {
             throw new TelegramException('Hook url is empty!');
